@@ -1,0 +1,342 @@
+" Note: Skip initialization for vim-tiny or vim-small.
+if !1 | finish | endif
+
+if has('vim_starting')
+   set nocompatible    " Be iMproved
+
+   " Required:
+   set runtimepath+=~/.vim/bundle/neobundle.vim/
+endif
+
+" Required:
+call neobundle#begin(expand('~/.vim/bundle/'))
+
+" Let NeoBundle manage NeoBundle
+" Required:
+NeoBundleFetch 'Shougo/neobundle.vim'
+
+" My Bundles here:
+" Refer to |:NeoBundle-examples|.
+" Note: You don't set neobundle setting in .gvimrc!
+
+" vim Airline - status line
+NeoBundle 'bling/vim-airline'
+" " show buffers in the topline
+" let g:airline#extensions#tabline#enabled = 1
+" " Show just the filename
+" let g:airline#extensions#tabline#fnamemod = ':t'
+
+NeoBundle 'tpope/vim-surround'
+
+NeoBundle 'scrooloose/syntastic'
+
+NeoBundle 'Yggdroot/indentLine'
+
+NeoBundle 'tpope/vim-fugitive'
+
+NeoBundle 'exvim/ex-utility'
+
+NeoBundle 'exvim/ex-project'
+
+" show VCS changes
+NeoBundle 'airblade/vim-gitgutter'
+" NeoBundle 'mhinz/vim-signify'
+
+" nice-looking colorful parenthesis
+NeoBundle 'kien/rainbow_parentheses.vim'
+
+NeoBundle 'kien/ctrlp.vim'
+
+
+NeoBundle 'MarcWeber/vim-addon-mw-utils'
+NeoBundle 'tomtom/tlib_vim'
+NeoBundle 'garbas/vim-snipmate'
+
+" snippets. pudb for instance, though for pudb i use <leader>b
+NeoBundle 'honza/vim-snippets'
+
+" NeoBundle 'xolox/vim-misc'
+" NeoBundle 'xolox/vim-reload'
+
+NeoBundle 'klen/python-mode'
+
+" plugin for searching through files
+NeoBundle 'dyng/ctrlsf.vim'
+" ack.vim kinda sucks
+" NeoBundle 'mileszs/ack.vim'
+
+
+" no need for a separate buffer plugin, using CtrlP instead
+" NeoBundle 'fholgado/minibufexpl.vim'
+
+NeoBundle 'tomtom/tcomment_vim'
+
+" NeoBundle 'powerman/vim-plugin-autosess'
+
+
+call neobundle#end()
+
+
+" tabs, indents
+filetype plugin indent on
+set smartindent
+set tabstop=4
+set shiftwidth=4
+set expandtab
+set smarttab
+
+set nowrap
+
+set title                " change the terminal's title
+set visualbell           " don't beep
+set noerrorbells         " don't beep
+
+set nobackup
+set noswapfile
+
+exec "set listchars=tab:\uBB\uBB,trail:\uB7,nbsp:~"
+set list
+
+" If there are uninstalled bundles found on startup,
+" this will conveniently prompt you to install them.
+NeoBundleCheck
+
+
+" Pathogen
+" execute pathogen#infect()
+" call pathogen#helptags() " generate helptags for everything in ‘runtimepath’
+
+" remap leader before assigning any action to it,
+" so it would be substituted correctly
+let mapleader=","
+nnoremap  ;  :
+" nnoremap  :  ;
+
+" syntax highlighting, colors
+syntax on
+
+syntax enable
+" set background=light
+colorscheme molokai
+" let g:solarized_termcolors=256
+
+set t_Co=256 " Explicitly tell Vim that the terminal supports 256 colors
+" highlight Comment cterm=bold
+
+" you can have unwritten changes to a file and open a new file using :e,
+" without being forced to write or undo your changes first.
+set hidden
+
+" line numbers
+set number
+" highlight ColorColumn ctermbg=gray30
+highlight ColorColumn ctermbg=DarkBlue
+call matchadd('ColorColumn', '\%80v', 100)
+call matchadd('ColorColumn', '\%110v', 100)
+set colorcolumn=0
+" set relativenumber
+" autocmd InsertEnter * :set number
+" autocmd InsertLeave * :set relativenumber
+" :au FocusLost * :set number
+" :au FocusGained * :set relativenumber
+
+
+" mouse support
+set mouse=a
+set ttyfast
+
+
+" Buffers
+" new buffer
+nmap <leader>T :enew<CR>
+" next buffer
+nmap <leader>l :bnext<CR>
+" prev buffer
+nmap <leader>h :bprevious<CR>
+" Close the current buffer and move to the previous one
+" This replicates the idea of closing a tab
+nmap <leader>bq :bp <BAR> bd #<CR>
+
+" Show all open buffers and their status
+nmap <leader>bl :ls<CR>
+
+
+if exists("loaded_nerd_tree")
+    autocmd VimEnter * if !argc() | NERDTreeToggle | endif
+endif
+
+set nocompatible   " Disable vi-compatibility
+set laststatus=2   " Always show the statusline
+set encoding=utf-8 " Necessary to show Unicode glyphs
+set incsearch      " show search matches as you type
+
+
+" Set initial window size
+if has("gui_running")
+" GUI is running or is about to start.
+" Maximize gvim window (for an alternative on Windows, see simalt below).
+  set lines=50 columns=170
+" else
+"   " This is console Vim.
+"   if exists("+lines")
+"     set lines=50
+"   endif
+"   if exists("+columns")
+"     set columns=100
+"   endif
+endif
+
+" source ~/.vim/highlight.vim
+" source ~/.vim/indent-object.vim
+
+" Search for selected text, forwards or backwards.
+vnoremap <silent> * :<C-U>
+    \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+    \gvy/<C-R><C-R>=substitute(
+    \escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+    \gV:call setreg('"', old_reg, old_regtype)<CR>
+vnoremap <silent> # :<C-U>
+    \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+    \gvy?<C-R><C-R>=substitute(
+    \escape(@", '?\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+    \gV:call setreg('"', old_reg, old_regtype)<CR>
+" Search for a slashes as normal text, i.e. no escaping
+command! -nargs=1 Ss let @/ = <q-args>|set hlsearch
+" Search for any character as normal text
+command! -nargs=1 SS let @/ = '\V'.escape(<q-args>, '\')|set hlsearch
+
+" Run shell command and read output to buffer
+" command! -complete=shellcmd -nargs=+ Shell call s:RunShellCommand(<q-args>)
+" function! s:RunShellCommand(cmdline)
+"   echo a:cmdline
+"   let expanded_cmdline = a:cmdline
+"   for part in split(a:cmdline, ' ')
+"      if part[0] =~ '\v[%#<]'
+"         let expanded_part = fnameescape(expand(part))
+"         let expanded_cmdline = substitute(expanded_cmdline, part, expanded_part, '')
+"      endif
+"   endfor
+"   botright new
+"   setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile nowrap
+"   call setline(1, 'You entered:    ' . a:cmdline)
+"   call setline(2, 'Expanded Form:  ' .expanded_cmdline)
+"   call setline(3,substitute(getline(2),'.','=','g'))
+"   execute '$read !'. expanded_cmdline
+"   setlocal nomodifiable
+"   1
+" endfunction
+
+
+" Shell ------------------------------------------------------------------- {{{
+function! s:ExecuteInShell(command) " {{{
+    let command = join(map(split(a:command), 'expand(v:val)'))
+    let winnr = bufwinnr('^' . command . '$')
+    silent! execute  winnr < 0 ? 'botright vnew ' . fnameescape(command) : winnr . 'wincmd w'
+    setlocal buftype=nowrite bufhidden=wipe nobuflisted noswapfile nowrap nonumber
+    echo 'Execute ' . command . '...'
+    silent! execute 'silent %!'. command
+    silent! redraw
+    silent! execute 'au BufUnload <buffer> execute bufwinnr(' . bufnr('#') . ') . ''wincmd w'''
+    silent! execute 'nnoremap <silent> <buffer> <LocalLeader>r :call <SID>ExecuteInShell(''' . command . ''')<CR>:AnsiEsc<CR>'
+    silent! execute 'nnoremap <silent> <buffer> q :q<CR>'
+    silent! execute 'AnsiEsc'
+    echo 'Shell command ' . command . ' executed.'
+endfunction " }}}
+command! -complete=shellcmd -nargs=+ Shell call s:ExecuteInShell(<q-args>)
+nnoremap <leader>! :Shell
+" }}}
+
+
+" just highlight the match in red...
+function! HLNext (blinktime)
+    let [bufnum, lnum, col, off] = getpos('.')
+    let matchlen = strlen(matchstr(strpart(getline('.'),col-1),@/))
+    let target_pat = '\c\%#'.@/
+    let ring = matchadd('WhiteOnRed', target_pat, 101)
+    redraw
+    exec 'sleep ' . float2nr(a:blinktime * 1000) . 'm'
+    call matchdelete(ring)
+    redraw
+endfunction
+" nnoremap <silent> n   n:call HLNext(0.4)<cr>
+" nnoremap <silent> N   N:call HLNext(0.4)<cr>
+
+
+" rainbow_parentheses settings
+au VimEnter * RainbowParenthesesToggle
+au Syntax * RainbowParenthesesLoadRound
+au Syntax * RainbowParenthesesLoadSquare
+au Syntax * RainbowParenthesesLoadBraces
+
+" vim-signify
+let g:signify_sign_change = '~'
+
+
+" source ~/.vim/vcsrc.vim
+let g:signify_vcs_list = [ 'svn' ]
+" let g:signify_vcs_list = [ 'git',  'svn' ]
+
+
+" Pymode plugin settings
+let g:pymode_folding = 0
+let g:pep8_ignore="E501,W601"
+let g:pymode_lint_ignore="E501,W601"
+let g:pymode_options_colorcolumn = 0
+
+
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.pyc,.git*,*.wildignore
+
+"Show the Subversion 'blame' annotation for the current file, in a narrow
+"  window to the left of it.
+"Usage:
+"  'gb' or ':Blame'
+"  To get rid of it, close or delete the annotation buffer.
+"Bugs:
+"  If the source file buffer has unsaved changes, these aren't noticed and
+"    the annotations won't align properly. Should either warn or preferably
+"    annotate the actual buffer contents rather than the last saved version.
+"  When annotating the same source file again, it creates a new annotation
+"    buffer. It should re-use the existing one if it still exists.
+"Possible enhancements:
+"  When invoked on a revnum in a Blame window, re-blame same file up to the
+"    previous revision.
+"  Dynamically synchronize when edits are made to the source file.
+:function s:svnBlame()
+   let line = line(".")
+   setlocal nowrap
+   " create a new window at the left-hand side
+   aboveleft 18vnew
+   " blame, ignoring white space changes
+   %!svn blame -x-w "#"
+   setlocal nomodified readonly buftype=nofile nowrap winwidth=1
+   setlocal nonumber
+   if has('&relativenumber') | setlocal norelativenumber | endif
+   " return to original line
+   exec "normal " . line . "G"
+   " synchronize scrolling, and return to original window
+   setlocal scrollbind
+   wincmd p
+   setlocal scrollbind
+   syncbind
+:endfunction
+:map gb :call <SID>svnBlame()<CR>
+:command Blame call s:svnBlame()
+
+
+
+
+" Ctrl-p plugin settings
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlPBuffer'
+let g:ctrlp_custom_ignore = {
+    \ 'dir': '^\/tmp',
+    \ 'file': '\.fugitiveblame$\|\.exproject$',
+    \ }
+
+" Ctrl-f plugin settings
+let g:ctrlsf_auto_close = 0
+let g:ctrlsf_position = 'right'
+nmap <C-F>f <Plug>CtrlSFPrompt
+
+" leave Ex mode for good
+nnoremap Q <nop>
