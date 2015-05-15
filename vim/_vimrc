@@ -71,6 +71,15 @@ NeoBundle 'dyng/ctrlsf.vim'
 
 NeoBundle 'tomtom/tcomment_vim'
 
+" NeoBundle 'Shougo/vimfiler.vim'
+
+NeoBundle 'vim-scripts/CmdlineComplete'
+
+NeoBundle 'scrooloose/nerdtree'
+NeoBundle 'Xuyuanp/nerdtree-git-plugin'
+
+NeoBundle 'jewes/Conque-Shell'
+
 " NeoBundle 'powerman/vim-plugin-autosess'
 
 
@@ -146,24 +155,22 @@ set mouse=a
 set ttyfast
 
 
-" Buffers
-" new buffer
-nmap <leader>T :enew<CR>
-" next buffer
-nmap <leader>l :bnext<CR>
-" prev buffer
-nmap <leader>h :bprevious<CR>
-" Close the current buffer and move to the previous one
-" This replicates the idea of closing a tab
-nmap <leader>bq :bp <BAR> bd #<CR>
+"" Buffers
+"" new buffer
+"nmap <leader>T :enew<CR>
+"" next buffer
+"nmap <leader>l :bnext<CR>
+"" prev buffer
+"nmap <leader>h :bprevious<CR>
+"" Close the current buffer and move to the previous one
+"" This replicates the idea of closing a tab
+"nmap <leader>bq :bp <BAR> bd #<CR>
+"
+"" Show all open buffers and their status
+"nmap <leader>bl :ls<CR>
 
-" Show all open buffers and their status
-nmap <leader>bl :ls<CR>
 
-
-if exists("loaded_nerd_tree")
-    autocmd VimEnter * if !argc() | NERDTreeToggle | endif
-endif
+autocmd VimEnter * if !argc() | NERDTreeToggle | endif
 
 set nocompatible   " Disable vi-compatibility
 set laststatus=2   " Always show the statusline
@@ -378,3 +385,30 @@ vnoremap <silent> <Leader>is :<C-U>let old_reg_a=@a<CR>
  \gvc<C-R>a<Esc>
  \:let @a=old_reg_a<CR>
  \:let @"=old_reg<CR>
+
+
+" set netrw to tree style
+let g:netrw_liststyle=3
+nmap <Leader>n :NERDTreeFind<CR>
+nmap <Leader>m :NERDTreeToggle<CR>
+
+
+"Set filetypes
+au BufRead,BufNewFile {Gemfile,Rakefile,Capfile,*.rake,config.ru,Guardfile,*.god}     set ft=ruby
+au BufRead,BufNewFile {*.md,*.mkd,*.markdown}                                         set ft=markdown
+au BufNewFile,BufRead {*.coffee,*.coffee.erb}                                         set filetype=coffee
+au BufNewFile,BufRead {*.eco,*.eco.erb}                                               set filetype=mason
+au BufNewFile,BufRead {*.less,*.less.erb}                                             set filetype=less
+au BufNewFile,BufRead *.js.erb                                                        set filetype=javascript
+au BufNewFile,BufRead *.raml                                                          set filetype=yaml
+au BufNewFile,BufRead {*.handlebars,*.hbs}                                            set filetype=handlebars
+
+
+" just to spice things up use this for syntactic errors
+let g:syntastic_error_symbol = "✗"
+let g:syntastic_warning_symbol = "⚠"
+
+
+" open terminal in buffer or separately
+nmap <C-w>w :ConqueTermSplit bash<cr>
+nmap <C-w>q :sh <cr>
