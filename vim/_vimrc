@@ -140,8 +140,13 @@ set hidden
 set number
 " highlight ColorColumn ctermbg=gray30
 highlight ColorColumn ctermbg=DarkBlue
-call matchadd('ColorColumn', '\%80v', 100)
-call matchadd('ColorColumn', '\%110v', 100)
+" fires for newly opened editor
+:au BufWinEnter * let w:m1=matchadd('ColorColumn', '\%80v', 100)
+:au BufWinEnter * let w:m2=matchadd('ColorColumn', '\%110v', 100)
+" fires for window splits
+:au WinEnter * let w:m1=matchadd('ColorColumn', '\%80v', 100)
+:au WinEnter * let w:m2=matchadd('ColorColumn', '\%110v', 100)
+
 set colorcolumn=0
 " set relativenumber
 " autocmd InsertEnter * :set number
