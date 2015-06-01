@@ -27,12 +27,14 @@ NeoBundle 'bling/vim-airline'
 " let g:airline#extensions#tabline#fnamemod = ':t'
 
 NeoBundle 'tpope/vim-surround'
+"NeoBundle 'tpope/vim-repeat'
 
 NeoBundle 'scrooloose/syntastic'
 
 NeoBundle 'Yggdroot/indentLine'
 
 NeoBundle 'tpope/vim-fugitive'
+"NeoBundle 'kablamo/vim-git-log'
 
 NeoBundle 'exvim/ex-utility'
 
@@ -181,14 +183,30 @@ set nocompatible   " Disable vi-compatibility
 set laststatus=2   " Always show the statusline
 set encoding=utf-8 " Necessary to show Unicode glyphs
 set incsearch      " show search matches as you type
+set ignorecase
+set smartcase
+set gdefault
+set hlsearch
+nnoremap <leader><space> :noh<cr>
+" nnoremap <tab> %
+" vnoremap <tab> %
 
+" move by screen lines instead of file lines
+nnoremap j gj
+nnoremap k gk
+
+set noerrorbells visualbell t_vb=
+autocmd GUIEnter * set visualbell t_vb=
 
 " Set initial window size
 if has("gui_running")
 " GUI is running or is about to start.
 " Maximize gvim window (for an alternative on Windows, see simalt below).
-  set lines=50 columns=170
-" else
+    set lines=50 columns=170
+    " set guioptions-=m  "remove menu bar
+    set guioptions-=T  "remove toolbar
+    set guioptions-=r  "remove right-hand scroll bar
+    set guioptions-=L  "remove left-hand scroll barelse
 "   " This is console Vim.
 "   if exists("+lines")
 "     set lines=50
@@ -405,9 +423,13 @@ au BufNewFile,BufRead {*.coffee,*.coffee.erb}                                   
 au BufNewFile,BufRead {*.eco,*.eco.erb}                                               set filetype=mason
 au BufNewFile,BufRead {*.less,*.less.erb}                                             set filetype=less
 au BufNewFile,BufRead *.js.erb                                                        set filetype=javascript
-au BufNewFile,BufRead *.raml                                                          set filetype=yaml
+au BufNewFile,BufRead {*.raml,*.yaml}                                                 set filetype=yaml
 au BufNewFile,BufRead {*.handlebars,*.hbs}                                            set filetype=handlebars
 
+" save when window is out of focus
+" could be useful, but works only in GUI mode
+" may try to figure out if it's possible for terminal mode
+au FocusLost * :wa
 
 " just to spice things up use this for syntactic errors
 let g:syntastic_error_symbol = "✗"
@@ -417,3 +439,17 @@ let g:syntastic_warning_symbol = "⚠"
 " open terminal in buffer or separately
 nmap <C-w>w :ConqueTermSplit bash<cr>
 nmap <C-w>q :sh <cr>
+
+" Easy window navigation
+map <C-h> <C-w>h
+map <C-j> <C-w>j
+map <C-k> <C-w>k
+map <C-l> <C-w>l
+
+" use w!! to sudo write file, after it's already opened
+cmap w!! w !sudo tee % >/dev/null
+
+map <S-Insert> <C-r>+
+map! <S-Insert> <C-r>+
+
+let NERDTreeIgnore = ['\.pyc$']
