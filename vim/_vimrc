@@ -359,7 +359,7 @@ set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.pyc,.git*,*.wildignore
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlPBuffer'
 let g:ctrlp_custom_ignore = {
-    \ 'dir': '^\/tmp',
+    \ 'dir': '^\tmp$\|artifacts$\|coverage$\|\.git$\|\.svn$\|logs$',
     \ 'file': '\.fugitiveblame$\|\.exproject$',
     \ }
 
