@@ -188,6 +188,9 @@ set smartcase
 set gdefault
 set hlsearch
 nnoremap <leader><space> :noh<cr>
+
+set lazyredraw
+set ttyscroll=3
 " nnoremap <tab> %
 " vnoremap <tab> %
 
