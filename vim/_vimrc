@@ -453,3 +453,6 @@ map <S-Insert> <C-r>+
 map! <S-Insert> <C-r>+
 
 let NERDTreeIgnore = ['\.pyc$']
+
+" TROUBLESHOOTING
+let g:pymode_rope_complete_on_dot = 0
