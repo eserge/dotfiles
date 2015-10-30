@@ -192,7 +192,11 @@ set hlsearch
 nnoremap <leader><space> :noh<cr>
 
 set lazyredraw
-set ttyscroll=3
+
+if !has('nvim')
+    set ttyscroll=3
+endif
+
 " nnoremap <tab> %
 " vnoremap <tab> %
 
