@@ -374,6 +374,7 @@ let g:ctrlp_custom_ignore = {
 let g:ctrlsf_auto_close = 0
 let g:ctrlsf_position = 'right'
 nmap <C-F>f <Plug>CtrlSFPrompt
+nnoremap <Leader>fp :CtrlSF --python
 
 " leave Ex mode for good
 nnoremap Q <nop>
@@ -465,3 +466,4 @@ let NERDTreeIgnore = ['\.pyc$']
 
 " TROUBLESHOOTING
 let g:pymode_rope_complete_on_dot = 0
+let g:pymode_rope = 0
