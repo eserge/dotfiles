@@ -21,49 +21,51 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 
 " vim Airline - status line
 NeoBundle 'bling/vim-airline'
+NeoBundle 'Valloric/YouCompleteMe'
 " " show buffers in the topline
 " let g:airline#extensions#tabline#enabled = 1
 " " Show just the filename
 " let g:airline#extensions#tabline#fnamemod = ':t'
 
-NeoBundle 'tpope/vim-surround'
+" NeoBundle 'tpope/vim-surround'
 "NeoBundle 'tpope/vim-repeat'
 
-NeoBundle 'scrooloose/syntastic'
+" NeoBundle 'scrooloose/syntastic'
 
-NeoBundle 'Yggdroot/indentLine'
+" NeoBundle 'Yggdroot/indentLine'
 
-NeoBundle 'tpope/vim-fugitive'
+" NeoBundle 'tpope/vim-fugitive'
 "NeoBundle 'kablamo/vim-git-log'
 
-NeoBundle 'exvim/ex-utility'
+" NeoBundle 'exvim/ex-utility'
 
-NeoBundle 'exvim/ex-project'
+" NeoBundle 'exvim/ex-project'
 
 " show VCS changes
-NeoBundle 'airblade/vim-gitgutter'
+" NeoBundle 'airblade/vim-gitgutter'
 " NeoBundle 'mhinz/vim-signify'
 
 " nice-looking colorful parenthesis
-NeoBundle 'kien/rainbow_parentheses.vim'
+" NeoBundle 'kien/rainbow_parentheses.vim'
 
-NeoBundle 'kien/ctrlp.vim'
+" NeoBundle 'kien/ctrlp.vim'
 
 
-NeoBundle 'MarcWeber/vim-addon-mw-utils'
-NeoBundle 'tomtom/tlib_vim'
-NeoBundle 'garbas/vim-snipmate'
+" NeoBundle 'MarcWeber/vim-addon-mw-utils'
+" NeoBundle 'tomtom/tlib_vim'
+" NeoBundle 'garbas/vim-snipmate'
 
 " snippets. pudb for instance, though for pudb i use <leader>b
-NeoBundle 'honza/vim-snippets'
+" NeoBundle 'honza/vim-snippets'
 
 " NeoBundle 'xolox/vim-misc'
 " NeoBundle 'xolox/vim-reload'
 
-NeoBundle 'klen/python-mode'
+" NeoBundle 'klen/python-mode'
+" NeoBundle 'davidhalter/jedi-vim'
 
 " plugin for searching through files
-NeoBundle 'dyng/ctrlsf.vim'
+" NeoBundle 'dyng/ctrlsf.vim'
 " ack.vim kinda sucks
 " NeoBundle 'mileszs/ack.vim'
 
@@ -75,14 +77,14 @@ NeoBundle 'tomtom/tcomment_vim'
 
 " NeoBundle 'Shougo/vimfiler.vim'
 
-NeoBundle 'vim-scripts/CmdlineComplete'
+" NeoBundle 'vim-scripts/CmdlineComplete'
 
-NeoBundle 'scrooloose/nerdtree'
-NeoBundle 'Xuyuanp/nerdtree-git-plugin'
+" NeoBundle 'scrooloose/nerdtree'
+" NeoBundle 'Xuyuanp/nerdtree-git-plugin'
 
-NeoBundle 'jewes/Conque-Shell'
+" NeoBundle 'jewes/Conque-Shell'
 
-NeoBundle 'myusuf3/numbers.vim'
+" NeoBundle 'myusuf3/numbers.vim'
 
 " NeoBundle 'powerman/vim-plugin-autosess'
 
@@ -109,6 +111,7 @@ set noswapfile
 
 exec "set listchars=tab:\uBB\uBB,trail:\uB7,nbsp:~"
 set list
+" set exrc
 
 " If there are uninstalled bundles found on startup,
 " this will conveniently prompt you to install them.
@@ -145,11 +148,11 @@ set number
 " highlight ColorColumn ctermbg=gray30
 highlight ColorColumn ctermbg=DarkBlue
 " fires for newly opened editor
-:au BufWinEnter * let w:m1=matchadd('ColorColumn', '\%80v', 100)
-:au BufWinEnter * let w:m2=matchadd('ColorColumn', '\%110v', 100)
-" fires for window splits
-:au WinEnter * let w:m1=matchadd('ColorColumn', '\%80v', 100)
-:au WinEnter * let w:m2=matchadd('ColorColumn', '\%110v', 100)
+" :au BufWinEnter * let w:m1=matchadd('ColorColumn', '\%80v', 100)
+" :au BufWinEnter * let w:m2=matchadd('ColorColumn', '\%110v', 100)
+" " fires for window splits
+" :au WinEnter * let w:m1=matchadd('ColorColumn', '\%80v', 100)
+" :au WinEnter * let w:m2=matchadd('ColorColumn', '\%110v', 100)
 
 set colorcolumn=0
 " set relativenumber
@@ -179,7 +182,7 @@ set ttyfast
 "nmap <leader>bl :ls<CR>
 
 
-autocmd VimEnter * if !argc() | NERDTreeToggle | endif
+" autocmd VimEnter * if !argc() | NERDTreeToggle | endif
 
 set nocompatible   " Disable vi-compatibility
 set laststatus=2   " Always show the statusline
@@ -263,105 +266,34 @@ command! -nargs=1 SS let @/ = '\V'.escape(<q-args>, '\')|set hlsearch
 "   1
 " endfunction
 
-
-" Shell ------------------------------------------------------------------- {{{
-function! s:ExecuteInShell(command) " {{{
-    let command = join(map(split(a:command), 'expand(v:val)'))
-    let winnr = bufwinnr('^' . command . '$')
-    silent! execute  winnr < 0 ? 'botright vnew ' . fnameescape(command) : winnr . 'wincmd w'
-    setlocal buftype=nowrite bufhidden=wipe nobuflisted noswapfile nowrap nonumber
-    echo 'Execute ' . command . '...'
-    silent! execute 'silent %!'. command
-    silent! redraw
-    silent! execute 'au BufUnload <buffer> execute bufwinnr(' . bufnr('#') . ') . ''wincmd w'''
-    silent! execute 'nnoremap <silent> <buffer> <LocalLeader>r :call <SID>ExecuteInShell(''' . command . ''')<CR>:AnsiEsc<CR>'
-    silent! execute 'nnoremap <silent> <buffer> q :q<CR>'
-    silent! execute 'AnsiEsc'
-    echo 'Shell command ' . command . ' executed.'
-endfunction " }}}
-command! -complete=shellcmd -nargs=+ Shell call s:ExecuteInShell(<q-args>)
-nnoremap <leader>! :Shell
-" }}}
-
-
-" just highlight the match in red...
-function! HLNext (blinktime)
-    let [bufnum, lnum, col, off] = getpos('.')
-    let matchlen = strlen(matchstr(strpart(getline('.'),col-1),@/))
-    let target_pat = '\c\%#'.@/
-    let ring = matchadd('WhiteOnRed', target_pat, 101)
-    redraw
-    exec 'sleep ' . float2nr(a:blinktime * 1000) . 'm'
-    call matchdelete(ring)
-    redraw
-endfunction
-" nnoremap <silent> n   n:call HLNext(0.4)<cr>
-" nnoremap <silent> N   N:call HLNext(0.4)<cr>
-
-
 " rainbow_parentheses settings
-au VimEnter * RainbowParenthesesToggle
-au Syntax * RainbowParenthesesLoadRound
-au Syntax * RainbowParenthesesLoadSquare
-au Syntax * RainbowParenthesesLoadBraces
+" au VimEnter * RainbowParenthesesToggle
+" au Syntax * RainbowParenthesesLoadRound
+" au Syntax * RainbowParenthesesLoadSquare
+" au Syntax * RainbowParenthesesLoadBraces
 
 " vim-signify
-let g:signify_sign_change = '~'
+" let g:signify_sign_change = '~'
 
 
 " source ~/.vim/vcsrc.vim
-let g:signify_vcs_list = [ 'svn' ]
+" let g:signify_vcs_list = [ 'svn' ]
 " let g:signify_vcs_list = [ 'git',  'svn' ]
 
 
 " Pymode plugin settings
-let g:pymode_folding = 0
-let g:pep8_ignore="E501,W601"
-let g:pymode_lint_ignore="E501,W601"
-let g:pymode_options_colorcolumn = 0
+" let g:pymode_folding = 0
+" let g:pep8_ignore="E501,W601"
+" let g:pymode_rope = 0
+" let g:pymode_rope_complete_on_dot = 0
+" let g:pymode_lint = 0
+" " let g:pymode_lint_ignore="E501,W601"
+" let g:pymode_options_colorcolumn = 0
 
 
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.pyc,.git*,*.wildignore
 
-"Show the Subversion 'blame' annotation for the current file, in a narrow
-"  window to the left of it.
-"Usage:
-"  'gb' or ':Blame'
-"  To get rid of it, close or delete the annotation buffer.
-"Bugs:
-"  If the source file buffer has unsaved changes, these aren't noticed and
-"    the annotations won't align properly. Should either warn or preferably
-"    annotate the actual buffer contents rather than the last saved version.
-"  When annotating the same source file again, it creates a new annotation
-"    buffer. It should re-use the existing one if it still exists.
-"Possible enhancements:
-"  When invoked on a revnum in a Blame window, re-blame same file up to the
-"    previous revision.
-"  Dynamically synchronize when edits are made to the source file.
-:function s:svnBlame()
-   let line = line(".")
-   setlocal nowrap
-   " create a new window at the left-hand side
-   aboveleft 18vnew
-   " blame, ignoring white space changes
-   %!svn blame -x-w "#"
-   setlocal nomodified readonly buftype=nofile nowrap winwidth=1
-   setlocal nonumber
-   if has('&relativenumber') | setlocal norelativenumber | endif
-   " return to original line
-   exec "normal " . line . "G"
-   " synchronize scrolling, and return to original window
-   setlocal scrollbind
-   wincmd p
-   setlocal scrollbind
-   syncbind
-:endfunction
-:map gb :call <SID>svnBlame()<CR>
-:command Blame call s:svnBlame()
-
-
-
-
+"
 " Ctrl-p plugin settings
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlPBuffer'
@@ -418,10 +350,10 @@ vnoremap <silent> <Leader>is :<C-U>let old_reg_a=@a<CR>
  \:let @"=old_reg<CR>
 
 
-" set netrw to tree style
-let g:netrw_liststyle=3
-nmap <Leader>n :NERDTreeFind<CR>
-nmap <Leader>m :NERDTreeToggle<CR>
+" " set netrw to tree style
+" let g:netrw_liststyle=3
+" nmap <Leader>n :NERDTreeFind<CR>
+" nmap <Leader>m :NERDTreeToggle<CR>
 
 
 "Set filetypes
@@ -454,7 +386,7 @@ map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-l> <C-w>l
 
-nnoremap <F3> :NumbersToggle<CR>
+" nnoremap <F3> :NumbersToggle<CR>
 
 " use w!! to sudo write file, after it's already opened
 cmap w!! w !sudo tee % >/dev/null
@@ -464,6 +396,11 @@ map! <S-Insert> <C-r>+
 
 let NERDTreeIgnore = ['\.pyc$']
 
-" TROUBLESHOOTING
-let g:pymode_rope_complete_on_dot = 0
-let g:pymode_rope = 0
+" " TROUBLESHOOTING
+" let g:pymode_rope = 0
+" let g:pymode_rope_complete_on_dot = 0
+
+" :set omnifunc
+" omnifunc=jedi#completions
+"
+" set secure
