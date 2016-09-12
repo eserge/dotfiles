@@ -19,50 +19,36 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 " Refer to |:NeoBundle-examples|.
 " Note: You don't set neobundle setting in .gvimrc!
 
-" vim Airline - status line
-NeoBundle 'bling/vim-airline'
-NeoBundle 'Valloric/YouCompleteMe'
-" " show buffers in the topline
-" let g:airline#extensions#tabline#enabled = 1
-" " Show just the filename
-" let g:airline#extensions#tabline#fnamemod = ':t'
 
-" NeoBundle 'tpope/vim-surround'
+NeoBundle 'bling/vim-airline'  " vim Airline - status line
+NeoBundle 'Valloric/YouCompleteMe'  " on-type completion
+
+NeoBundle 'tpope/vim-surround'  " surround stuff with quotes, parenthesis, etc
 "NeoBundle 'tpope/vim-repeat'
 
-" NeoBundle 'scrooloose/syntastic'
+NeoBundle 'scrooloose/syntastic'  " syntax check for different files
 
 " NeoBundle 'Yggdroot/indentLine'
 
-" NeoBundle 'tpope/vim-fugitive'
+NeoBundle 'tpope/vim-fugitive'  " git operations from the editor
 "NeoBundle 'kablamo/vim-git-log'
 
-" NeoBundle 'exvim/ex-utility'
-
-" NeoBundle 'exvim/ex-project'
-
 " show VCS changes
-" NeoBundle 'airblade/vim-gitgutter'
+NeoBundle 'airblade/vim-gitgutter'
 " NeoBundle 'mhinz/vim-signify'
 
-" nice-looking colorful parenthesis
-" NeoBundle 'kien/rainbow_parentheses.vim'
 
-" NeoBundle 'kien/ctrlp.vim'
+" NeoBundle 'kien/rainbow_parentheses.vim'  " nice-looking colorful parenthesis
 
+NeoBundle 'ctrlpvim/ctrlp.vim'  " fuzzy search and open files
 
-" NeoBundle 'MarcWeber/vim-addon-mw-utils'
-" NeoBundle 'tomtom/tlib_vim'
-" NeoBundle 'garbas/vim-snipmate'
-
-" snippets. pudb for instance, though for pudb i use <leader>b
-" NeoBundle 'honza/vim-snippets'
+NeoBundle 'MarcWeber/vim-addon-mw-utils'
+NeoBundle 'tomtom/tlib_vim'
+NeoBundle 'garbas/vim-snipmate'  " snippets plugin with dependencies
+NeoBundle 'honza/vim-snippets'  " snippets libarary
 
 " NeoBundle 'xolox/vim-misc'
 " NeoBundle 'xolox/vim-reload'
-
-" NeoBundle 'klen/python-mode'
-" NeoBundle 'davidhalter/jedi-vim'
 
 " plugin for searching through files
 " NeoBundle 'dyng/ctrlsf.vim'
@@ -79,12 +65,12 @@ NeoBundle 'tomtom/tcomment_vim'
 
 " NeoBundle 'vim-scripts/CmdlineComplete'
 
-" NeoBundle 'scrooloose/nerdtree'
-" NeoBundle 'Xuyuanp/nerdtree-git-plugin'
+NeoBundle 'scrooloose/nerdtree'
+NeoBundle 'Xuyuanp/nerdtree-git-plugin'
 
 " NeoBundle 'jewes/Conque-Shell'
 
-" NeoBundle 'myusuf3/numbers.vim'
+NeoBundle 'myusuf3/numbers.vim'
 
 " NeoBundle 'powerman/vim-plugin-autosess'
 
@@ -111,7 +97,7 @@ set noswapfile
 
 exec "set listchars=tab:\uBB\uBB,trail:\uB7,nbsp:~"
 set list
-" set exrc
+set exrc
 
 " If there are uninstalled bundles found on startup,
 " this will conveniently prompt you to install them.
@@ -230,16 +216,17 @@ endif
 " source ~/.vim/indent-object.vim
 
 " Search for selected text, forwards or backwards.
-vnoremap <silent> * :<C-U>
-    \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
-    \gvy/<C-R><C-R>=substitute(
-    \escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
-    \gV:call setreg('"', old_reg, old_regtype)<CR>
-vnoremap <silent> # :<C-U>
-    \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
-    \gvy?<C-R><C-R>=substitute(
-    \escape(@", '?\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
-    \gV:call setreg('"', old_reg, old_regtype)<CR>
+" vnoremap <silent> * :<C-U>
+"     \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+"     \gvy/<C-R><C-R>=substitute(
+"     \escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+"     \gV:call setreg('"', old_reg, old_regtype)<CR>
+" vnoremap <silent> # :<C-U>
+"     \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+"     \gvy?<C-R><C-R>=substitute(
+"     \escape(@", '?\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+"     \gV:call setreg('"', old_reg, old_regtype)<CR>
+
 " Search for a slashes as normal text, i.e. no escaping
 command! -nargs=1 Ss let @/ = <q-args>|set hlsearch
 " Search for any character as normal text
@@ -404,3 +391,10 @@ let NERDTreeIgnore = ['\.pyc$']
 " omnifunc=jedi#completions
 "
 " set secure
+
+let virtual_env = $VIRTUAL_ENV
+if virtual_env
+    let python_binary = virtual_env + '/bin/python'
+    let g:syntastic_python_python_exec = python_binary
+    let g:ycm_python_binary_path = '/Users/eserge/.pyenv/versions/tpb-fetcher/bin/python'
+endif
