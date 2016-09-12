@@ -83,6 +83,7 @@ NeoBundle 'Xuyuanp/nerdtree-git-plugin'
 NeoBundle 'jewes/Conque-Shell'
 
 NeoBundle 'myusuf3/numbers.vim'
+NeoBundle 'rust-lang/rust.vim'
 
 " NeoBundle 'powerman/vim-plugin-autosess'
 
@@ -113,6 +114,10 @@ set list
 " If there are uninstalled bundles found on startup,
 " this will conveniently prompt you to install them.
 NeoBundleCheck
+
+" Neovim python support
+let g:python_host_prog = '/Users/s_efremov/.pyenv/versions/neovim/bin/python'
+let g:python3_host_prog = '/Users/s_efremov/.pyenv/versions/neovim3/bin/python'
 
 
 " Pathogen
@@ -374,7 +379,10 @@ let g:ctrlp_custom_ignore = {
 let g:ctrlsf_auto_close = 0
 let g:ctrlsf_position = 'right'
 nmap <C-F>f <Plug>CtrlSFPrompt
-nnoremap <Leader>fp :CtrlSF --python
+vmap <C-F>f <Plug>CtrlSFVwordPath
+vmap <C-F>F <Plug>CtrlSFVwordExec
+nnoremap <Leader>fp :CtrlSF --filetype python
+vmap <C-F>f <Plug>CtrlSFVwordPath --filetype python
 
 " leave Ex mode for good
 nnoremap Q <nop>
