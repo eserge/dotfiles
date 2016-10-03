@@ -117,9 +117,9 @@
 ;; below, Emacs knows where to look for the corresponding file.
 (add-to-list 'load-path "~/.emacs.d/customizations")
 
-;; Sets up exec-path-from-shell so that Emacs will use the correct
-;; environment variables
-(load "shell-integration.el")
+; ;; Sets up exec-path-from-shell so that Emacs will use the correct
+; ;; environment variables
+; (load "shell-integration.el")
 
 ;; These customizations make it easier for you to navigate files,
 ;; switch buffers, and choose options from the minibuffer.
@@ -140,7 +140,7 @@
 
 ;; Langauage-specific
 (load "setup-clojure.el")
-(load "setup-js.el")
+; (load "setup-js.el")
 
 ;; grabbed almost everything above from braveclojure book
 
@@ -148,6 +148,55 @@
 
 (custom-set-variables
  '(initial-frame-alist (quote ((fullscreen . maximized))))) ;; start maximized
+
+
+;; this is a JS setup block
+;; use web-mode for .jsx files
+(add-to-list 'auto-mode-alist '("\\.jsx$" . web-mode))
+
+;; http://www.flycheck.org/manual/latest/index.html
+(require 'flycheck)
+
+;; turn on flychecking globally
+(add-hook 'after-init-hook #'global-flycheck-mode)
+
+(add-hook 'js2-mode-hook (lambda () (setq js2-basic-offset 2)))
+
+;; ;; disable jshint since we prefer eslint checking
+;; (setq-default flycheck-disabled-checkers
+;;   (append flycheck-disabled-checkers
+;;     '(javascript-jshint)))
+
+;; ;; use eslint with web-mode for jsx files
+;; (flycheck-add-mode 'javascript-eslint 'web-mode)
+
+;; ;; customize flycheck temp file prefix
+;; (setq-default flycheck-temp-prefix ".flycheck")
+
+;; ;; disable json-jsonlist checking for json files
+;; (setq-default flycheck-disabled-checkers
+;;   (append flycheck-disabled-checkers
+;;     '(json-jsonlist)))
+
+(defun my/use-eslint-from-node-modules ()
+  (let* ((root (locate-dominating-file
+                (or (buffer-file-name) default-directory)
+                "node_modules"))
+         (eslint (and root
+                      (expand-file-name "node_modules/eslint/bin/eslint.js"
+                                        root))))
+    (when (and eslint (file-executable-p eslint))
+      (setq-local flycheck-javascript-eslint-executable eslint))))
+
+(add-hook 'flycheck-mode-hook #'my/use-eslint-from-node-modules)
+
+;; https://github.com/purcell/exec-path-from-shell
+;; only need exec-path-from-shell on OSX
+;; this hopefully sets up path and other vars better
+(when (memq window-system '(mac ns))
+  (exec-path-from-shell-initialize))
+
+;; end of JS setup
 
 
 ;; Activate installed packages
@@ -202,6 +251,11 @@
 (setq mouse-wheel-scroll-amount '(1 ((shift) . 1) ((control) . nil)))
 (setq mouse-wheel-progressive-speed nil)
 
+
+(projectile-global-mode)
+(setq projectile-completion-system 'helm)
+
+
 ;; sublimity scroll
 (setq sublimity-scroll-weight 10
       sublimity-scroll-drift-length 5)
@@ -219,34 +273,86 @@
 
 (ac-config-default)
 
-(helm-mode 1)
-
 ;; helm settings (TAB in helm window for actions over selected items,
 ;; C-SPC to select items)
 (require 'helm-config)
 (require 'helm-misc)
-; (require 'helm-projectile)
+(require 'helm-projectile)
 (require 'helm-locate)
+
+(helm-projectile-on)
+
+
+;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
+;; Changed to "C-c h". Note: We must set "C-c h" globally, because we
+;; cannot change `helm-command-prefix-key' once `helm-config' is loaded.
+(global-set-key (kbd "C-c h") 'helm-command-prefix)
+(global-unset-key (kbd "C-x c"))
+
+(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent action
+(define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB work in terminal
+(define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
+
+(when (executable-find "curl")
+  (setq helm-net-prefer-curl t))
+
+(setq helm-split-window-in-side-p           nil ; open helm buffer inside current window, not occupy whole other window
+      helm-move-to-line-cycle-in-source     t ; move to end or beginning of source when reaching top or bottom of source.
+      helm-ff-search-library-in-sexp        t ; search for library in `require' and `declare-function' sexp.
+      helm-scroll-amount                    8 ; scroll 8 lines other window using M-<next>/M-<prior>
+      helm-ff-file-name-history-use-recentf t
+      helm-echo-input-in-header-line t)
+
+; (defun spacemacs//helm-hide-minibuffer-maybe ()
+;   "Hide minibuffer in Helm session if we use the header line as input field."
+;   (when (with-helm-buffer helm-echo-input-in-header-line)
+;     (let ((ov (make-overlay (point-min) (point-max) nil nil t)))
+;       (overlay-put ov 'window (selected-window))
+;       (overlay-put ov 'face
+;                    (let ((bg-color (face-background 'default nil)))
+;                      `(:background ,bg-color :foreground ,bg-color)))
+;       (setq-local cursor-type nil))))
+;
+; (add-hook 'helm-minibuffer-set-up-hook
+;           'spacemacs//helm-hide-minibuffer-maybe)
+
+(setq helm-autoresize-max-height 0)
+(setq helm-autoresize-min-height 20)
+
 (setq helm-quick-update t)
 (setq helm-bookmark-show-location t)
 (setq helm-buffers-fuzzy-matching t)
 
-; (after 'projectile
-;   (package 'helm-projectile))
+(helm-autoresize-mode 1)
+
+
 (global-set-key (kbd "M-x") 'helm-M-x)
 
-(defun helm-my-buffers ()
-  (interactive)
-  (let ((helm-ff-transformer-show-only-basename nil))
-  (helm-other-buffer '(helm-c-source-buffers-list
-                       helm-c-source-elscreen
-                       helm-c-source-projectile-files-list
-                       helm-c-source-ctags
-                       helm-c-source-recentf
-                       helm-c-source-locate)
-                     "*helm-my-buffers*")))
+;; (defun helm-my-buffers ()
+;;   (interactive)
+;;   (let ((helm-ff-transformer-show-only-basename nil))
+;;   (helm-other-buffer '(helm-c-source-buffers-list
+;;                        helm-c-source-elscreen
+;;                        helm-c-source-projectile-files-list
+;;                        helm-c-source-ctags
+;;                        helm-c-source-recentf
+;;                        helm-c-source-locate)
+;;                      "*helm-my-buffers*")))
+
+(helm-mode 1)
 
 
 (scroll-bar-mode -1)
 ; (menu-bar-mode nil)
 (tool-bar-mode -1)
+
+(global-linum-mode t)
+
+(require 'git-gutter)
+(global-git-gutter-mode +1)
+(git-gutter:linum-setup)
+
+(setq make-backup-files nil)
+
+
+(define-key global-map (kbd "RET") 'newline-and-indent)
