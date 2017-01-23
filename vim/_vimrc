@@ -26,6 +26,7 @@ NeoBundle 'bling/vim-airline'
 " " Show just the filename
 " let g:airline#extensions#tabline#fnamemod = ':t'
 
+NeoBundle 'othree/es.next.syntax.vim'
 NeoBundle 'tpope/vim-surround'
 "NeoBundle 'tpope/vim-repeat'
 
@@ -442,6 +443,9 @@ au BufNewFile,BufRead *.js.erb                                                  
 au BufNewFile,BufRead {*.raml,*.yaml}                                                 set filetype=yaml
 au BufNewFile,BufRead {*.handlebars,*.hbs}                                            set filetype=handlebars
 
+autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS shiftwidth=2 tabstop=2
+autocmd FileType html setlocal shiftwidth=2 tabstop=2
+
 " save when window is out of focus
 " could be useful, but works only in GUI mode
 " may try to figure out if it's possible for terminal mode
@@ -462,7 +466,7 @@ map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-l> <C-w>l
 
-nnoremap <F3> :NumbersToggle<CR>
+nnoremap <leader>3 :NumbersToggle<CR>
 
 " use w!! to sudo write file, after it's already opened
 cmap w!! w !sudo tee % >/dev/null
@@ -475,3 +479,4 @@ let NERDTreeIgnore = ['\.pyc$']
 " TROUBLESHOOTING
 let g:pymode_rope_complete_on_dot = 0
 let g:pymode_rope = 0
+" let g:pymode_lint = 0
