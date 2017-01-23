@@ -4,6 +4,11 @@
     branch = auto
     ui = auto
 
+[color "status"]
+    added = green
+    changed = yellow
+    untracked = red
+
 [push]
     default = nothing
 
