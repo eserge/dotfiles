@@ -35,4 +35,7 @@ else
 fi
 ln -s ~/.dotfiles/git/_gitconfig ~/.gitconfig
 
+echo "Linking Emacs (Spacemacs) configuration"
+ln -s ~/.dotfiles/.spacemacs ~/.spacemacs
+
 echo "Done."
