@@ -13,23 +13,32 @@
     default = nothing
 
 [core]
-    editor = vim
+    editor = emacsclient
     pager = less -R
+    excludesfile = /Users/s_efremov/.gitignore_global
 
 [alias]
-    diverges = !bash -c 'diff -u <(git rev-list --first-parent "${1}") <(git rev-list --first-parent "${2:-HEAD}") | sed -ne \"s/^ //p\" | head -1' -
-    st = status
-    ci = commit
     br = branch
+    ci = commit
     co = checkout
     df = diff
+    diverges = !bash -c 'diff -u <(git rev-list --first-parent "${1}") <(git rev-list --first-parent "${2:-HEAD}") | sed -ne \"s/^ //p\" | head -1' -
+    glog = log --graph --decorate --oneline --all
+    glog = log --graph --decorate --oneline --all
     lg = log -p
-    up = !sh -c 'git pull --rebase --prune && git log --pretty=format:\"%Cred%ae %Creset- %C(yellow)%s %Creset(%ar)\" HEAD@{1}..'
     lol = log --graph --decorate --pretty=oneline --abbrev-commit
     lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
-    glog = log --graph --decorate --oneline --all
     ls = ls-files
-    glog = log --graph --decorate --oneline --all
+    pull = pull --tags
+    ppull = pull --prune
+    st = status
+    up = !sh -c 'git pull --rebase --prune && git log --pretty=format:\"%Cred%ae %Creset- %C(yellow)%s %Creset(%ar)\" HEAD@{1}..'
 
 [include]
     path = .gitconfigmachine
+[difftool "sourcetree"]
+    cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+    path =
+[mergetool "sourcetree"]
+    cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+    trustExitCode = true
