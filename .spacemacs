@@ -18,6 +18,10 @@ values."
    ;; of a list then all discovered layers will be installed.
    dotspacemacs-configuration-layers
    '(
+     ruby
+     ansible
+     nginx
+     sql
      yaml
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
@@ -36,7 +40,7 @@ values."
      markdown
      ;; org
      ;; spell-checking
-     python
+     (python :variables python-test-runner 'pytest)
      ;; (shell :variables
      ;;        shell-default-shell 'eshell
      ;;        shell-default-height 30
@@ -122,11 +126,11 @@ values."
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
    ;; size to make separators look not too crappy.
-   dotspacemacs-default-font '("Source Code Pro"
-                               :size 13
+   dotspacemacs-default-font '("Inconsolata"
+                               :size 14
                                :weight normal
                                :width normal
-                               :powerline-scale 1.1)
+                               :powerline-scale 1.2)
    ;; The leader key
    dotspacemacs-leader-key ","
    ;; The leader key accessible in `emacs state' and `insert state'
