@@ -38,4 +38,7 @@ ln -s ~/.dotfiles/git/_gitconfig ~/.gitconfig
 echo "Linking Emacs (Spacemacs) configuration"
 ln -s ~/.dotfiles/.spacemacs ~/.spacemacs
 
+echo "Linking psql configuration"
+ln -s ~/.dotfiles/.psqlrc ~/.psqlrc
+
 echo "Done."
