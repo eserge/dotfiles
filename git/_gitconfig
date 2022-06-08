@@ -13,7 +13,7 @@
     default = nothing
 
 [core]
-    editor = emacsclient
+    editor = code --wait
     pager = less -XRF
 	excludesfile = /Users/eserge/.gitignore_global
 
