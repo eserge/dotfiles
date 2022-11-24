@@ -53,7 +53,7 @@ NeoBundle 'kien/ctrlp.vim'
 
 NeoBundle 'MarcWeber/vim-addon-mw-utils'
 NeoBundle 'tomtom/tlib_vim'
-NeoBundle 'garbas/vim-snipmate'
+" NeoBundle 'garbas/vim-snipmate'
 
 " snippets. pudb for instance, though for pudb i use <leader>b
 NeoBundle 'honza/vim-snippets'
